@@ -1,7 +1,21 @@
 <template>
-  <h2 v-once>{{ name }}</h2>
-  <button @click="name = 'Batman'">Change Name</button>
-  <h2 v-pre>{{ name }}</h2>
+ <h2>FullName - {{ firstName }} {{ lastName }}</h2>
+ <h2>Computed fullname - {{ fullName }}</h2>
+
+ <button @click="changeFullname">Change Fullname</button>
+
+ <button @click="items.push({id: 4,title : 'Keyboard', price: 50})">Add item</button>
+ <h2>
+  Total - {{ total }}
+ </h2>
+
+ <div v-for="item in items" :key="item">
+  <h2 v-if="item.price > 100">{{ item.title }}  {{ item.price }}</h2>
+ </div>
+
+ <h2 v-for="item in expensiveItems" :key="item.id">
+  {{ item.title }}  {{ item. price }}
+ </h2>
 </template>
 
 <script>
@@ -9,41 +23,55 @@ export default {
   name: 'App',
   data() {
     return {
-      name : 'Vishwas' 
+      firstName : 'Vishwas',
+      lastName : 'Wayne',
+      items : [
+        {
+          id : 1,
+          title : 'TV',
+          price : 100
+        },
+        {
+          id : 2,
+          title : 'Phone',
+          price : 200
+        },
+        {
+          id : 3,
+          title : 'Laptop',
+          price : 300
+        },
+      ],
+
     }
   },
   methods: {
-   
+   changeFullname () {
+    this.fullName = 'Clark Kent'
+   }
   },
+  computed : {
+    fullName : {
+      get () {
+        return `${this.firstName} ${this.lastName}`
+      },
+      set (value) {
+        const names = value.split(' ')
+        this.firstName = names[0]
+        this.lastName = names[1]
+      },
+    },
+    total () {
+      return this.items.reduce((total,curr) =>  total + curr.price, 0) 
+    },
+    expensiveItems () {
+      return this.items.filter( item => item.price > 100)
+    }
+  }
 }
 </script>
 
 <style scoped>
-label{
-  font-weight: bold;
-  display: flex;
-  margin-bottom: 5px;
-}
 
-input + label {
-  font-weight: bold;
-  display: inline-flex;
-  margin-right: 20px;
-}
-
-input [type = 'text'],
-textarea,
-select{
-   display: block;
-   width: 400px;
-   padding: 6px 12px;
-   font-size: 14px;
-   line-height: 1.42857143;
-   color: #555;
-   background-color: #fff;
-   background-image: none;
-   border: 1px solid #ccc;
-   border-radius: 4px;
-}
 
 </style>
