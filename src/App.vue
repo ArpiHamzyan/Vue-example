@@ -1,21 +1,18 @@
 <template>
- <h2>FullName - {{ firstName }} {{ lastName }}</h2>
- <h2>Computed fullname - {{ fullName }}</h2>
+ <h2>Volume Tracker (0-20)</h2>
+ <h3>Current Volume   {{ volume }}</h3>
 
- <button @click="changeFullname">Change Fullname</button>
-
- <button @click="items.push({id: 4,title : 'Keyboard', price: 50})">Add item</button>
- <h2>
-  Total - {{ total }}
- </h2>
-
- <div v-for="item in items" :key="item">
-  <h2 v-if="item.price > 100">{{ item.title }}  {{ item.price }}</h2>
+ <div>
+  <button @click="volume += 2">Increment</button>
+  <button @click="volume -= 2">Decrement</button>
  </div>
 
- <h2 v-for="item in expensiveItems" :key="item.id">
-  {{ item.title }}  {{ item. price }}
- </h2>
+ <input type="text" v-model="movie">
+ <input type="text" v-model="movieInfo.title">
+ <input type="text" v-model="movieInfo.actor">
+ <div>
+  <button @click="movieList = movieList.concat(['Wonder Woman'])">Add Movie</button>
+ </div>
 </template>
 
 <script>
@@ -23,49 +20,46 @@ export default {
   name: 'App',
   data() {
     return {
-      firstName : 'Vishwas',
-      lastName : 'Wayne',
-      items : [
-        {
-          id : 1,
-          title : 'TV',
-          price : 100
-        },
-        {
-          id : 2,
-          title : 'Phone',
-          price : 200
-        },
-        {
-          id : 3,
-          title : 'Laptop',
-          price : 300
-        },
-      ],
-
+      volume : 0,
+      movie : 'Batman',
+      movieInfo : {
+        title : '',
+        actor : ''
+      },
+      movieList : ['Batman' , 'Superman']
     }
   },
   methods: {
-   changeFullname () {
-    this.fullName = 'Clark Kent'
-   }
+   
   },
   computed : {
-    fullName : {
-      get () {
-        return `${this.firstName} ${this.lastName}`
-      },
-      set (value) {
-        const names = value.split(' ')
-        this.firstName = names[0]
-        this.lastName = names[1]
-      },
+   
+  },
+  watch : {
+    volume (newValue,oldValue) {
+      if(newValue > oldValue && newValue === 16 ){
+        alert('Listening')
+      }
     },
-    total () {
-      return this.items.reduce((total,curr) =>  total + curr.price, 0) 
+    movie : {
+      handler(newValue) {
+        console.log(`Calling ${newValue}`)
+      },
+      immediate : true
     },
-    expensiveItems () {
-      return this.items.filter( item => item.price > 100)
+    movieInfo : {
+      handler (newValue) {
+        console.log(
+          `Calling movie title ${newValue.title} and actor ${newValue.actor}`
+        )
+      },
+      deep: true
+    },
+    movieList : {
+      handler (newValue) {
+        console.log(`Updated list ${newValue}`)
+      },
+      //deep:true
     }
   }
 }
