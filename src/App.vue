@@ -1,26 +1,38 @@
 <template>
-  <button @click="showPopup = true" >Show Popup</button>
- <Popup v-show="showPopup" @close="closePopup"/>
+ <NameList>
+  <template v-slot:default="slotProps">
+    {{ slotProps.firstName }}  {{ slotProps.lastName }}
+  </template>
+ </NameList>
+
+ <NameList>
+  <template v-slot:default="slotProps">
+    {{ slotProps.lastName }}  {{ slotProps.firstName }} 
+  </template>
+ </NameList>
+
+ <NameList>
+  <template v-slot:default="slotProps">
+    {{ slotProps.firstName }} 
+  </template>
+ </NameList>
 </template>
 
 <script>
-import Popup from './components/Popup.vue'
+import NameList from './components/NameList.vue'
 
 export default {
   name: 'App',
   components : {
-    Popup,
+   NameList,
   },
   data () {
     return {
-      showPopup: false,
+      
     }
   },
   methods: {
-    closePopup (name) {
-      this.showPopup = false
-      console.log(name)
-    }
+    
   }
   
 }
